@@ -28,7 +28,7 @@ void main() {
 
       expect(
         result,
-        'div([h1([ text([This is a title)],)],p([ text([Hello)],b([ text([World!)],)],)],)],',
+        "div([ classes: 'content content-left', text([Hello)],b([ text([World!)],)],)],",
       );
     });
   });

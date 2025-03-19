@@ -31,7 +31,7 @@ class JaspConverterVisitor extends TreeVisitor {
 
   String _jasprTree = '';
 
-  List<String> _typedAttributes = [
+  final List<String> _typedAttributes = [
     'id',
     'class',
     'href',
@@ -40,7 +40,7 @@ class JaspConverterVisitor extends TreeVisitor {
     'referrerpolicy',
   ];
 
-  List<String> _eventAttributes = ['onclick', 'onhover'];
+  final List<String> _eventAttributes = ['onclick', 'onhover'];
 
   String get jasprTree =>
       _jasprTree.isNotEmpty
@@ -98,6 +98,8 @@ class JaspConverterVisitor extends TreeVisitor {
         val +=
             " referrerPolicy: ${ReferrerPolicy.values.firstWhere((t) => t.value == node.attributes['referrerpolicy']).toString()}, ";
       }
+      _typedAttributes;
+      _eventAttributes;
 
       // next support <input> type
 

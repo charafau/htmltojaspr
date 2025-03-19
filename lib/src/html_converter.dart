@@ -26,41 +26,21 @@ class HtmlConverter {
   }
 }
 
-// class _Visitor extends TreeVisitor {
-//   String indent = '';
-
-//   @override
-//   void visitText(Text node) {
-//     if (node.data.trim().isNotEmpty) {
-//       print('$indent${node.data.trim()}');
-//     }
-//   }
-
-//   @override
-//   void visitElement(Element node) {
-//     if (isVoidElement(node.localName)) {
-//       print('$indent<${node.localName}/>');
-//     } else {
-//       print('$indent<${node.localName}>');
-//       indent += '  ';
-//       visitChildren(node);
-//       indent = indent.substring(0, indent.length - 1);
-//       print('$indent</${node.localName}>');
-//     }
-//   }
-
-//   @override
-//   void visitChildren(Node node) {
-//     for (var child in node.nodes) {
-//       visit(child);
-//     }
-//   }
-// }
-
 class JaspConverterVisitor extends TreeVisitor {
   String _indent = '';
 
   String _jasprTree = '';
+
+  List<String> _typedAttributes = [
+    'id',
+    'class',
+    'href',
+    'type',
+    'target',
+    'referrerpolicy',
+  ];
+
+  List<String> _eventAttributes = ['onclick', 'onhover'];
 
   String get jasprTree =>
       _jasprTree.isNotEmpty
@@ -118,9 +98,14 @@ class JaspConverterVisitor extends TreeVisitor {
         val +=
             " referrerPolicy: ${ReferrerPolicy.values.firstWhere((t) => t.value == node.attributes['referrerpolicy']).toString()}, ";
       }
+
+      // next support <input> type
+
       // custom attributes:
       // placeholder
       //
+
+      // canvas must be supported separately
 
       val += '[';
 

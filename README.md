@@ -1,39 +1,44 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages). 
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+The `htmltojaspr` project is a tool designed to convert HTML code into Dart code compatible with the [Jaspr framework](https://jaspr.site/), enabling developers to seamlessly integrate HTML structures into their Jaspr applications.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- **HTML to Jaspr Conversion**: Transforms standard HTML elements into their corresponding Jaspr components.
 
-## Getting started
+## Getting Started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+### Prerequisites
+
+- Ensure you have [Dart SDK](https://dart.dev/get-dart) installed on your system.
+
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+To convert an HTML string to a Jaspr component:
+
 
 ```dart
-const like = 'sample';
+import 'package:htmltojaspr/htmltojaspr.dart';
+
+void main() {
+  String htmlContent = '''
+  <div>
+    <h1>Hello, World!</h1>
+    <p>This is a sample HTML content.</p>
+  </div>
+  ''';
+
+  final jasprComponent = HtmlConverter().covert(htmlContent);
+  print(jasprComponent);
+}
 ```
 
-## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+This will output Dart code that represents the provided HTML structure as Jaspr components.
+
+## Additional Information
+
+- **Contributing**: Contributions are welcome! Please submit issues and pull requests on the [GitHub repository](https://github.com/charafau/htmltojaspr).
+
+- **License**: This project is licensed under the BSD-3-Clause License. See the [LICENSE](https://github.com/charafau/htmltojaspr/blob/main/LICENSE) file for details.
+
+For more details and updates, visit the [GitHub repository](https://github.com/charafau/htmltojaspr). 

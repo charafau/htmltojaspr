@@ -108,6 +108,115 @@ void main() {
           "a( href: 'https://www.example.com',  target: Target.top, [ text('Opens in the full body of the window'),])",
         );
       });
+
+      test(
+        'should convert link with referrer policy no referrer noReferrer',
+        () async {
+          final result = htmlConverter.covert('''
+          <a href="https://httpbin.org/get" referrerpolicy="no-referrer">No Referrer</a>
+        ''');
+
+          expect(
+            result,
+            "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.noReferrer, [ text('No Referrer'),])",
+          );
+        },
+      );
+
+      test(
+        'should convert link with referrer policy no referrer No Referrer (Downgrade)',
+        () async {
+          final result = htmlConverter.covert('''
+<a href="https://httpbin.org/get" referrerpolicy="no-referrer-when-downgrade">No Referrer (Downgrade)</a>
+        ''');
+
+          expect(
+            result,
+            "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.noReferrerWhenDowngrade, [ text('No Referrer (Downgrade)'),])",
+          );
+        },
+      );
+
+      test(
+        'should convert link with referrer policy no referrer Same Origin',
+        () async {
+          final result = htmlConverter.covert('''
+<a href="https://httpbin.org/get" referrerpolicy="same-origin">Same Origin</a>
+        ''');
+
+          expect(
+            result,
+            "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.sameOrigin, [ text('Same Origin'),])",
+          );
+        },
+      );
+      test(
+        'should convert link with referrer policy no referrer Origin Only',
+        () async {
+          final result = htmlConverter.covert('''
+<a href="https://httpbin.org/get" referrerpolicy="origin">Origin Only</a>
+        ''');
+
+          expect(
+            result,
+            "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.origin, [ text('Origin Only'),])",
+          );
+        },
+      );
+      test(
+        'should convert link with referrer policy no referrer Strict Origin',
+        () async {
+          final result = htmlConverter.covert('''
+<a href="https://httpbin.org/get" referrerpolicy="strict-origin">Strict Origin</a>
+        ''');
+
+          expect(
+            result,
+            "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.strictOrigin, [ text('Strict Origin'),])",
+          );
+        },
+      );
+      // NOT SUPPORTED BY Jaspr
+      //       test(
+      //         'should convert link with referrer policy no referrer Cross Origin',
+      //         () async {
+      //           final result = htmlConverter.covert('''
+      // <a href="https://httpbin.org/get" referrerpolicy="origin-when-cross-origin">Cross Origin</a>
+      //         ''');
+
+      //           expect(
+      //             result,
+      //             "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.noReferrer, [ text('Cross Origin'),])",
+      //           );
+      //         },
+      //       );
+      test(
+        'should convert link with referrer policy no referrer Strict Cross Origin',
+        () async {
+          final result = htmlConverter.covert('''
+<a href="https://httpbin.org/get" referrerpolicy="strict-origin-when-cross-origin">Strict Cross Origin</a>
+        ''');
+
+          expect(
+            result,
+            "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.strictOriginWhenCrossOrigin, [ text('Strict Cross Origin'),])",
+          );
+        },
+      );
+      test(
+        'should convert link with referrer policy no referrer Unsafe URL',
+        () async {
+          final result = htmlConverter.covert(
+            '''
+<a href="https://httpbin.org/get" referrerpolicy="unsafe-url">Unsafe URL</a>        ''',
+          );
+
+          expect(
+            result,
+            "a( href: 'https://httpbin.org/get',  referrerPolicy: ReferrerPolicy.unsafeUrl, [ text('Unsafe URL'),])",
+          );
+        },
+      );
     });
 
     // test('should convert custom parameters', () async {

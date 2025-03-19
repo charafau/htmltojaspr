@@ -107,13 +107,17 @@ class JaspConverterVisitor extends TreeVisitor {
         if (node.attributes.containsKey('type')) {
           val += " type: '${node.attributes['type']}', ";
         }
-
-        if (node.attributes.containsKey('target')) {
-          val +=
-              " target: ${Target.values.firstWhere((t) => t.value == node.attributes['target']).toString()}, ";
-        }
       }
 
+      if (node.attributes.containsKey('target')) {
+        val +=
+            " target: ${Target.values.firstWhere((t) => t.value == node.attributes['target']).toString()}, ";
+      }
+
+      if (node.attributes.containsKey('referrerpolicy')) {
+        val +=
+            " referrerPolicy: ${ReferrerPolicy.values.firstWhere((t) => t.value == node.attributes['referrerpolicy']).toString()}, ";
+      }
       // custom attributes:
       // placeholder
       //

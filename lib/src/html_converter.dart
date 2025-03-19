@@ -1,6 +1,7 @@
 import 'package:html/dom.dart';
 import 'package:html/dom_parsing.dart';
 import 'package:html/parser.dart';
+import 'package:htmltojaspr/src/types.dart';
 
 class HtmlConverter {
   String covert(String htmlSource) {
@@ -10,8 +11,8 @@ class HtmlConverter {
     print(document.outerHtml);
 
     // visitor output
-    print('html visitor:');
-    _Visitor().visit(document);
+    // print('html visitor:');
+    // _Visitor().visit(document);
 
     print('jaspr visitor:');
 
@@ -21,47 +22,50 @@ class HtmlConverter {
 
     final jasprConverter = JaspConverterVisitor()..visit(document);
 
-    return jasprConverter._jasprTree;
+    return jasprConverter.jasprTree;
   }
 }
 
-class _Visitor extends TreeVisitor {
-  String indent = '';
+// class _Visitor extends TreeVisitor {
+//   String indent = '';
 
-  @override
-  void visitText(Text node) {
-    if (node.data.trim().isNotEmpty) {
-      print('$indent${node.data.trim()}');
-    }
-  }
+//   @override
+//   void visitText(Text node) {
+//     if (node.data.trim().isNotEmpty) {
+//       print('$indent${node.data.trim()}');
+//     }
+//   }
 
-  @override
-  void visitElement(Element node) {
-    if (isVoidElement(node.localName)) {
-      print('$indent<${node.localName}/>');
-    } else {
-      print('$indent<${node.localName}>');
-      indent += '  ';
-      visitChildren(node);
-      indent = indent.substring(0, indent.length - 2);
-      print('$indent</${node.localName}>');
-    }
-  }
+//   @override
+//   void visitElement(Element node) {
+//     if (isVoidElement(node.localName)) {
+//       print('$indent<${node.localName}/>');
+//     } else {
+//       print('$indent<${node.localName}>');
+//       indent += '  ';
+//       visitChildren(node);
+//       indent = indent.substring(0, indent.length - 1);
+//       print('$indent</${node.localName}>');
+//     }
+//   }
 
-  @override
-  void visitChildren(Node node) {
-    for (var child in node.nodes) {
-      visit(child);
-    }
-  }
-}
+//   @override
+//   void visitChildren(Node node) {
+//     for (var child in node.nodes) {
+//       visit(child);
+//     }
+//   }
+// }
 
 class JaspConverterVisitor extends TreeVisitor {
   String _indent = '';
 
   String _jasprTree = '';
 
-  String get jasprTree => _jasprTree;
+  String get jasprTree =>
+      _jasprTree.isNotEmpty
+          ? _jasprTree.substring(0, _jasprTree.length - 1)
+          : _jasprTree;
 
   String get jasprTreePrettified =>
       _jasprTree.replaceAll(')],', ')],\n').replaceAll('([', '([\n');
@@ -73,7 +77,7 @@ class JaspConverterVisitor extends TreeVisitor {
   @override
   void visitText(Text node) {
     if (node.data.trim().isNotEmpty) {
-      final val = ('$_indent text([${node.data.trim()})],');
+      final val = "$_indent text('${node.data.trim()}'),";
 
       _jasprTree += val;
     }
@@ -85,11 +89,36 @@ class JaspConverterVisitor extends TreeVisitor {
       final val = ('$_indent<${node.localName}/>');
       _jasprTree += val;
     } else {
-      var val = ('$_indent${node.localName}([');
+      var val = '$_indent${node.localName}(';
+
+      if (node.attributes.containsKey('id')) {
+        val += " id: '${node.attributes['id']}', ";
+      }
 
       if (node.attributes.containsKey('class')) {
-        val += " classes: '${node.attributes['class']}',";
+        val += " classes: '${node.attributes['class']}', ";
       }
+
+      if (node.localName == 'a') {
+        if (node.attributes.containsKey('href')) {
+          val += " href: '${node.attributes['href']}', ";
+        }
+
+        if (node.attributes.containsKey('type')) {
+          val += " type: '${node.attributes['type']}', ";
+        }
+
+        if (node.attributes.containsKey('target')) {
+          val +=
+              " target: ${Target.values.firstWhere((t) => t.value == node.attributes['target']).toString()}, ";
+        }
+      }
+
+      // custom attributes:
+      // placeholder
+      //
+
+      val += '[';
 
       if (_prettify) {
         _indent += '  ';
@@ -100,7 +129,7 @@ class JaspConverterVisitor extends TreeVisitor {
       if (_prettify) {
         _indent = _indent.substring(0, _indent.length - 2);
       }
-      val = ('$_indent)],');
+      val = '$_indent]),';
 
       _jasprTree += val;
     }

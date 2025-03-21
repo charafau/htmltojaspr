@@ -40,8 +40,6 @@ class JaspConverterVisitor extends TreeVisitor {
     'referrerpolicy',
   ];
 
-  final List<String> _eventAttributes = ['onclick', 'onhover'];
-
   String get jasprTree =>
       _jasprTree.isNotEmpty
           ? _jasprTree.substring(0, _jasprTree.length - 1)
@@ -99,7 +97,6 @@ class JaspConverterVisitor extends TreeVisitor {
             " referrerPolicy: ${ReferrerPolicy.values.firstWhere((t) => t.value == node.attributes['referrerpolicy']).toString()}, ";
       }
       _typedAttributes;
-      _eventAttributes;
 
       // next support <input> type
 

@@ -219,6 +219,46 @@ void main() {
       );
     });
 
+    group('events', () {
+      test('should convert onclick', () {
+        final result = htmlConverter.covert('''
+            <button onclick="handleClick()">Click Me!</button>
+            ''');
+
+        expect(
+          result,
+          "button( events: {  'onclick': (event) {}, }, [ text('Click Me!'),])",
+        );
+      });
+
+      test('should convert tag with two events', () {
+        final result = htmlConverter.covert('''
+            <button onclick="handleClick()" onmousemove="alert()">Click Me!</button>
+            ''');
+
+        expect(
+          result,
+          "button( events: {  'onclick': (event) {}, 'onmousemove': (event) {}, }, [ text('Click Me!'),])",
+        );
+      });
+    });
+
+    test('should convert autofocus', () {
+      final result = htmlConverter.covert('''
+            <button autofocus>Click Me!</button>
+            ''');
+
+      expect(result, "button( autofocus: true, [ text('Click Me!'),])");
+    });
+
+    test('should convert disabled', () {
+      final result = htmlConverter.covert('''
+            <button disabled>Click Me!</button>
+            ''');
+
+      expect(result, "button( disabled: true, [ text('Click Me!'),])");
+    });
+
     // test('should convert custom parameters', () async {
     //   final result = htmlConverter.covert('''
     //     <a href="#" aria-current="page">Breadcrumb</a>''');

@@ -14,8 +14,6 @@ updates:
       prefix: "chore"
       include: "scope"
 
-  # Android Alarm Manager dependencies updates config
-
   - package-ecosystem: "pub"
     directory: "/"
     schedule:

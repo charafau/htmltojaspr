@@ -1,6 +1,7 @@
 import 'package:html/dom.dart';
 import 'package:html/dom_parsing.dart';
 import 'package:html/parser.dart';
+import 'package:htmltojaspr/src/html_events.dart';
 import 'package:htmltojaspr/src/types.dart';
 
 class HtmlConverter {
@@ -87,15 +88,38 @@ class JaspConverterVisitor extends TreeVisitor {
         }
       }
 
-      if (node.attributes.containsKey('target')) {
-        val +=
-            " target: ${Target.values.firstWhere((t) => t.value == node.attributes['target']).toString()}, ";
-      }
+      node.attributes.forEach((attribute, value) {
+        if (attribute == 'target') {
+          val +=
+              " target: ${Target.values.firstWhere((t) => t.value == value).toString()}, ";
+        }
 
-      if (node.attributes.containsKey('referrerpolicy')) {
-        val +=
-            " referrerPolicy: ${ReferrerPolicy.values.firstWhere((t) => t.value == node.attributes['referrerpolicy']).toString()}, ";
-      }
+        if (attribute == 'referrerpolicy') {
+          val +=
+              " referrerPolicy: ${ReferrerPolicy.values.firstWhere((t) => t.value == value).toString()}, ";
+        }
+
+        if (attribute == 'autofocus') {
+          val += " autofocus: true, ";
+        }
+
+        if (attribute == 'disabled') {
+          val += " disabled: true, ";
+        }
+      });
+
+      // add type for button class
+
+      // add support for inputs
+
+      val = _convertEvents(node, val);
+
+      // get all events from node
+
+      // if (node.attributes.containsKey('target')) {}
+
+      // if (node.attributes.containsKey('referrerpolicy')) {}
+
       _typedAttributes;
 
       // next support <input> type
@@ -121,6 +145,24 @@ class JaspConverterVisitor extends TreeVisitor {
 
       _jasprTree += val;
     }
+  }
+
+  String _convertEvents(Element node, String val) {
+    final allKeys = node.attributes.keys.map((key) => key.toString()).toList();
+
+    final allEventsFromNode =
+        allEventAttributes
+            .where((element) => allKeys.contains(element))
+            .toList();
+
+    if (allEventsFromNode.isNotEmpty) {
+      val += " events: { ";
+      for (var event in allEventsFromNode) {
+        val += " '$event': (event) {},";
+      }
+      val += " }, ";
+    }
+    return val;
   }
 
   @override

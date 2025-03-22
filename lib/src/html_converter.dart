@@ -32,14 +32,14 @@ class JaspConverterVisitor extends TreeVisitor {
 
   String _jasprTree = '';
 
-  final List<String> _typedAttributes = [
-    'id',
-    'class',
-    'href',
-    'type',
-    'target',
-    'referrerpolicy',
-  ];
+  // final List<String> _typedAttributes = [
+  //   'id',
+  //   'class',
+  //   'href',
+  //   'type',
+  //   'target',
+  //   'referrerpolicy',
+  // ];
 
   String get jasprTree =>
       _jasprTree.isNotEmpty

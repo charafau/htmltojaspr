@@ -8,18 +8,18 @@ class HtmlConverter {
   String convert(String htmlSource) {
     final document = parseFragment(htmlSource);
 
-    print('outer html:');
-    print(document.outerHtml);
+    // print('outer html:');
+    // print(document.outerHtml);
 
     // visitor output
     // print('html visitor:');
     // _Visitor().visit(document);
 
-    print('jaspr visitor:');
+    // print('jaspr visitor:');
 
-    final jasprConverterPrettify = JaspConverterVisitor(prettify: true)
-      ..visit(document);
-    print(jasprConverterPrettify.jasprTreePrettified);
+    // final jasprConverterPrettify = JaspConverterVisitor(prettify: true)
+    //   ..visit(document);
+    // print(jasprConverterPrettify.jasprTreePrettified);
 
     final jasprConverter = JaspConverterVisitor()..visit(document);
 

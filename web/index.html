@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <label for="html-input">Html</label>
+    <input type="text" id="html-input" value='<a href="#" class="card-footer-item">Save</a>' />
+    <button onclick="convertTwo()">Convert</button>
+
+    <p>
+    <div id="output"></div>
+    </p>
+
+    <script>
+        (async function convert() {
+            let dart2wasm_runtime;
+            let moduleInstance;
+            try {
+                const dartModulePromise = WebAssembly.compileStreaming(fetch('htmltojaspr.wasm'));
+                const imports = {};
+                dart2wasm_runtime = await import('./htmltojaspr.mjs');
+                moduleInstance = await dart2wasm_runtime.instantiate(dartModulePromise, imports);
+
+
+
+
+            } catch (exception) {
+                console.error(`Failed to fetch and instantiate wasm module: ${exception}`);
+            }
+
+            if (moduleInstance) {
+                try {
+                    await dart2wasm_runtime.invoke(moduleInstance);
+
+                    // globalThis.exportedFunction('hello world');
+                    // console.log(globalThis.convertToJaspr('<a href="#" class="card-footer-item">Save</a>'));
+
+
+
+                } catch (exception) {
+                    console.error(`Exception while invoking test: ${exception}`);
+                }
+            }
+        })();
+
+
+        function convertTwo() {
+            let inp = document.getElementById("html-input");
+
+            globalThis.convertToJaspr(inp.value, (dartCode) => {
+                console.log(dartCode)
+
+                var doc = document.getElementById("output");
+
+                doc.innerText = dartCode;
+            });
+
+        }
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
